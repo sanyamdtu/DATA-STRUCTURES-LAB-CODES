@@ -27,7 +27,7 @@ int main()
 {
     struct stack s;
     s.top = -1;
-    char c[] = "a+b*(c/d-e)+(f+g*h)-i";
+    char c[] = "(p-q)*((c+d)/r)+s";
     int i = 0;
     int n = sizeof(c) / sizeof(char);
     i = 0;

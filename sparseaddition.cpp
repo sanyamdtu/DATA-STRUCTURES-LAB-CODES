@@ -1,15 +1,12 @@
 #include <iostream>
 #define size 20
-
 using namespace std;
-
 struct sparse
 {
   int nrow, ncol, nz;
   int row[size], col[size], value[size];
 };
-
-sparse addition(sparse s1, sparse s2)
+sparse addition(struct sparse s1, struct sparse s2)
 {
   sparse s3;
   s3.nrow = s1.nrow;
@@ -62,7 +59,6 @@ sparse addition(sparse s1, sparse s2)
     j++;
     k++;
   }
-
   s3.nz = k;
   return s3;
 }
@@ -90,41 +86,37 @@ main()
 {
   sparse s1, s2, s3;
   int i;
-  cout << "Enter no. of row, column and non-zero elements in matrix 1:";
+  cout << "rows, cols and mumber of non-zero elements :";
   cin >> s1.nrow >> s1.ncol >> s1.nz;
   s2.nrow = s1.nrow;
   s2.ncol = s1.ncol;
 
-  cout << "Enter the elements of sparse matrix:";
+  cout << "Enter row colum val the elements :";
   for (i = 0; i < s1.nz; i++)
   {
     cin >> s1.row[i] >> s1.col[i] >> s1.value[i];
     if (s1.row[i] >= s1.nrow || s1.col[i] >= s1.ncol)
     {
-      cout << "\nWrong row or column. Type again";
+      cout << "\nType in order\n";
       cin >> s1.row[i] >> s1.col[i] >> s1.value[i];
     }
   }
-  cout << "Enter no. of  non-zero elements in matrix 2:";
+  cout << "non-zero elements of the other matrix:";
   cin >> s2.nz;
 
-  cout << "Enter the elements of sparse matrix:";
+  cout << "Enter row colum val the elements :";
 
   for (i = 0; i < s2.nz; i++)
   {
     cin >> s2.row[i] >> s2.col[i] >> s2.value[i];
     if (s2.row[i] >= s2.nrow || s2.col[i] >= s2.ncol)
     {
-      cout << "\nWrong row or column. Type again:";
+      cout << "\nType in order:";
       cin >> s2.row[i] >> s2.col[i] >> s2.value[i];
     }
   }
   s3 = addition(s1, s2);
-  cout << "\ns1\n";
-  display(s1);
-  cout << "\ns2\n";
-  display(s2);
-  cout << "\ns3\n";
+  cout << "\nanswer:\n";
   display(s3);
 
   return 0;
