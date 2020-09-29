@@ -15,7 +15,7 @@ void display(struct node *s)
         return;
     }
     struct node *q = s;
-    printf("THE LIST IS : ");
+    printf("order \n");
     while (q != NULL)
     {
         printf("%d ", q->value);
@@ -107,7 +107,7 @@ void search(struct node *s, int x)
     }
     else
     {
-        printf("Value found at position : %d", pos);
+        printf("exists  : %d \n", pos);
     }
     return;
 }
@@ -165,35 +165,40 @@ void DelAll(struct node *s)
 int main()
 {
     struct node *s = NULL;
+    int x;
     while (1)
     {
-        printf("\nEnnter 1 to Insert n\n Ennter 2 to dele\n\n enter 3 to find\n\n  enter 4 to  print \n\n5. Count\n\n6. Find Min\n\n7. Find Max\n\n8. Exit\n");
+        printf("\nEnnter 1 to Insert \nEnnter 2 to dele\nenter 3 to find\nenter 4 to  print \nenter 5 to Count\nenter 6 to   Min\nenter 7 to   Max\nany other to quit \n");
         int o;
         scanf("%d", &o);
-        switch (o)
+        if (o == 1)
         {
-        case 1:
             printf("entert the value : ");
-            int x;
+
             scanf("%d", &x);
             s = Insert(s, x);
             display(s);
-            break;
-        case 2:
-            printf("enter the value to be deleted : ");
+        }
+
+        if (o == 2)
+        {
+            printf("enter the value");
             scanf("%d", &x);
             s = Delete(s, x);
             display(s);
-            break;
-        case 3:
-            printf("enter the value to search : ");
+        }
+        if (o == 3)
+        {
+            printf("enter the value");
             scanf("%d", &x);
             search(s, x);
-            break;
-        case 4:
+        }
+        if (o == 4)
+        {
             display(s);
-            break;
-        case 5:
+        }
+        if (o == 5)
+        {
             if (count(s) == 0)
             {
                 printf("Underflow empty\n");
@@ -202,22 +207,25 @@ int main()
             {
                 printf("count %d", count(s));
             }
-            break;
-        case 6:
+        }
+        if (o == 6)
+        {
             if (FindMin(s) != -1)
             {
-                printf("The Minimum value is : %d", FindMin(s));
+                printf("Min is : %d", FindMin(s));
             }
-            break;
-        case 7:
+        }
+        if (o == 7)
+        {
             if (FindMax(s) != -1)
             {
-                printf("The Maximum value is : %d", FindMax(s));
+                printf("Max is : %d", FindMax(s));
             }
+        }
+        else
+        {
             break;
-        case 8:
-            DelAll(s);
-            return 0;
         }
     }
+    return 0;
 }

@@ -139,7 +139,7 @@ void multiply(struct m a, struct m m)
 	while (i < a.nr)
 	{
 		j = 0;
-		while (j < m.nr)
+		while (j < m.nc)
 		{
 			printf("%d ", res[i][j]);
 			j++;
