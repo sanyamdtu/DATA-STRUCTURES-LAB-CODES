@@ -1,38 +1,38 @@
 #include <iostream>
 #include <stdio.h>
 #define sz 30
-struct sparse
+struct m
 {
 	int nr, nc, nz, r[sz], c[sz], val[sz];
 };
-void read(struct sparse *s)
+void read(struct m *s)
 {
 	scanf("%d%d%d", &s->nr, &s->nc, &s->nz);
 	int i = 0;
-	printf("Enter the elements with row col value\n");
+	printf("Enter row column no. order respctively\n");
 	while (i < s->nz)
 	{
 		scanf("%d%d%d", &s->r[i], &s->c[i], &s->val[i]);
 		if (s->r[i] > s->nr || s->c[i] > s->nc)
 		{
-			printf("Wrong row or coloumn. Enter again.\n");
+			printf("Enter Coreectly \n");
 			scanf("%d%d%d", &s->r[i], &s->c[i], &s->val[i]);
 		}
 		i++;
 	}
 }
-void show(struct sparse s)
+void show(struct m s)
 {
 	int i = 0;
 	while (i < s.nz)
 	{
-		printf("%d %d %d\n", s.r[i], s.c[i], s.val[i]);
+		printf(" %d %d %d \n", s.r[i], s.c[i], s.val[i]);
 		i++;
 	}
 }
-struct sparse transpose(struct sparse s)
+struct m transpose(struct m s)
 {
-	struct sparse q;
+	struct m q;
 	int t[sz] = {}, f[sz] = {};
 	int i = 0;
 	while (i < s.nz)
@@ -60,77 +60,77 @@ struct sparse transpose(struct sparse s)
 	q.nc = s.nr;
 	return q;
 }
-struct sparse add(struct sparse a, struct sparse b)
+struct m add(struct m matrix1, struct m matrix2)
 {
-	struct sparse w;
+	struct m w;
 	int i = 0, j = 0, k = 0;
-	while (i < a.nz && j < b.nz)
+	while (i < matrix1.nz && j < matrix2.nz)
 	{
-		if (a.r[i] == b.r[j] && a.c[i] == b.c[j] && a.val[i] + b.val[j])
+		if (matrix1.r[i] == matrix2.r[j] && matrix1.c[i] == matrix2.c[j] && matrix1.val[i] + matrix2.val[j])
 		{
-			printf("%d\n", k);
-			w.r[k] = a.r[i];
-			w.c[k] = a.c[i];
-			w.val[k] = a.val[i] + b.val[j];
+			printf("%d \n", k);
+			w.r[k] = matrix1.r[i];
+			w.c[k] = matrix1.c[i];
+			w.val[k] = matrix1.val[i] + matrix2.val[j];
 			i++;
 			j++;
 			k++;
 		}
-		else if (a.r[i] == b.r[j] && a.c[i] == b.c[j] && a.val[i] + b.val[j] == 0)
+		else if (matrix1.r[i] == matrix2.r[j] && matrix1.c[i] == matrix2.c[j] && matrix1.val[i] + matrix2.val[j] == 0)
 		{
 			i++;
 			j++;
 		}
-		else if (a.r[i] < b.r[j] || (a.r[i] == b.r[j] && a.c[i] < b.c[j]))
+		else if (matrix1.r[i] < matrix2.r[j] || (matrix1.r[i] == matrix2.r[j] && matrix1.c[i] < matrix2.c[j]))
 		{
-			w.r[k] = a.r[i];
-			w.c[k] = a.c[i];
-			w.val[k] = a.val[i];
+			w.r[k] = matrix1.r[i];
+			w.c[k] = matrix1.c[i];
+			w.val[k] = matrix1.val[i];
 			i++;
 			k++;
 		}
 		else
 		{
-			w.r[k] = b.r[j];
-			w.c[k] = b.c[j];
-			w.val[k] = b.val[j];
+			w.r[k] = matrix2.r[j];
+			w.c[k] = matrix2.c[j];
+			w.val[k] = matrix2.val[j];
 			j++;
 			k++;
 		}
 	}
-	while (i < a.nz)
+	while (i < matrix1.nz)
 	{
-		w.r[k] = a.r[i];
-		w.c[k] = a.c[i];
-		w.val[k] = a.val[i];
+		w.r[k] = matrix1.r[i];
+		w.c[k] = matrix1.c[i];
+		w.val[k] = matrix1.val[i];
 		i++;
 		k++;
 	}
-	while (j < b.nz)
+	while (j < matrix2.nz)
 	{
-		w.r[k] = b.r[j];
-		w.c[k] = b.c[j];
-		w.val[k] = b.val[j];
+		w.r[k] = matrix2.r[j];
+		w.c[k] = matrix2.c[j];
+		w.val[k] = matrix2.val[j];
 		j++;
 		k++;
 	}
 	w.nz = k;
-	w.nr = a.nc;
+	w.nr = matrix1.nc;
 	w.nc = w.nr;
 	return w;
 }
-void multiply(struct sparse a, struct sparse m)
+void multiply(struct m a, struct m m)
 {
-	struct sparse b = transpose(m);
+	struct m matrix2 = transpose(m);
 	int res[sz][sz] = {};
 	int i = 0, j;
 	while (i < a.nz)
 	{
 		j = 0;
-		while (j < b.nz)
+		while (j < matrix2.nz)
 		{
-			if (a.c[i] == b.c[j])
-				res[a.r[i]][b.r[j]] += a.val[i] * b.val[j];
+			if (a.c[i] == matrix2.c[j])
+				res[a.r[i]][matrix2.r[j]] += a.val[i] * matrix2.val[j];
 			j++;
 		}
 		i++;
@@ -150,11 +150,17 @@ void multiply(struct sparse a, struct sparse m)
 }
 int main()
 {
-	struct sparse s, q, w;
-	printf("Enter the number of rows,coloumn and values of 1 matrix.\n");
+	struct m s, q, w;
+	printf("Enter the no. of rows,coloumn and values of 1 matrix.\n");
 	read(&s);
-	printf("Enter the number of rows,coloumn and values of 2 matrix.\n");
+	printf("Enter the no. of rows,coloumn and values of 2 matrix.\n");
 	read(&q);
+	w = transpose(s);
+	printf("m1 Transpose  is : \n");
+	show(w);
+	w = transpose(q);
+	printf("m2 Transpose  is : \n");
+	show(w);
 	printf("Matrix after multiplication : \n");
 	multiply(s, q);
 }
