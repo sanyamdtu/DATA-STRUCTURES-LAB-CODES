@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdio.h>
-#define sz 30
+#define sz 11
 struct m
 {
 	int nr, nc, nz, r[sz], c[sz], val[sz];
@@ -30,9 +30,9 @@ void show(struct m s)
 		i++;
 	}
 }
-struct m transpose(struct m s)
+struct m tra(struct m s)
 {
-	struct m q;
+	struct m extre;
 	int t[sz] = {}, f[sz] = {};
 	int i = 0;
 	while (i < s.nz)
@@ -49,79 +49,21 @@ struct m transpose(struct m s)
 	i = 0;
 	while (i < s.nz)
 	{
-		q.r[t[s.c[i]]] = s.c[i];
-		q.c[t[s.c[i]]] = s.r[i];
-		q.val[t[s.c[i]]] = s.val[i];
+		extre.r[t[s.c[i]]] = s.c[i];
+		extre.c[t[s.c[i]]] = s.r[i];
+		extre.val[t[s.c[i]]] = s.val[i];
 		t[s.c[i]]++;
 		i++;
 	}
-	q.nz = s.nz;
-	q.nr = s.nc;
-	q.nc = s.nr;
-	return q;
+	extre.nz = s.nz;
+	extre.nr = s.nc;
+	extre.nc = s.nr;
+	return extre;
 }
-struct m add(struct m matrix1, struct m matrix2)
-{
-	struct m w;
-	int i = 0, j = 0, k = 0;
-	while (i < matrix1.nz && j < matrix2.nz)
-	{
-		if (matrix1.r[i] == matrix2.r[j] && matrix1.c[i] == matrix2.c[j] && matrix1.val[i] + matrix2.val[j])
-		{
-			printf("%d \n", k);
-			w.r[k] = matrix1.r[i];
-			w.c[k] = matrix1.c[i];
-			w.val[k] = matrix1.val[i] + matrix2.val[j];
-			i++;
-			j++;
-			k++;
-		}
-		else if (matrix1.r[i] == matrix2.r[j] && matrix1.c[i] == matrix2.c[j] && matrix1.val[i] + matrix2.val[j] == 0)
-		{
-			i++;
-			j++;
-		}
-		else if (matrix1.r[i] < matrix2.r[j] || (matrix1.r[i] == matrix2.r[j] && matrix1.c[i] < matrix2.c[j]))
-		{
-			w.r[k] = matrix1.r[i];
-			w.c[k] = matrix1.c[i];
-			w.val[k] = matrix1.val[i];
-			i++;
-			k++;
-		}
-		else
-		{
-			w.r[k] = matrix2.r[j];
-			w.c[k] = matrix2.c[j];
-			w.val[k] = matrix2.val[j];
-			j++;
-			k++;
-		}
-	}
-	while (i < matrix1.nz)
-	{
-		w.r[k] = matrix1.r[i];
-		w.c[k] = matrix1.c[i];
-		w.val[k] = matrix1.val[i];
-		i++;
-		k++;
-	}
-	while (j < matrix2.nz)
-	{
-		w.r[k] = matrix2.r[j];
-		w.c[k] = matrix2.c[j];
-		w.val[k] = matrix2.val[j];
-		j++;
-		k++;
-	}
-	w.nz = k;
-	w.nr = matrix1.nc;
-	w.nc = w.nr;
-	return w;
-}
+
 void multiply(struct m a, struct m m)
 {
-	struct m matrix2 = transpose(m);
+	struct m matrix2 = tra(m);
 	int res[sz][sz] = {};
 	int i = 0, j;
 	while (i < a.nz)
@@ -150,17 +92,17 @@ void multiply(struct m a, struct m m)
 }
 int main()
 {
-	struct m s, q, w;
-	printf("Enter the no. of rows,coloumn and values of 1 matrix.\n");
+	struct m s, extre, w;
+	printf(" no. of rows,col and num of 1 m.\n");
 	read(&s);
-	printf("Enter the no. of rows,coloumn and values of 2 matrix.\n");
-	read(&q);
-	w = transpose(s);
-	printf("m1 Transpose  is : \n");
+	printf(" no. of rows,col and num of 2 m.\n");
+	read(&extre);
+	w = tra(s);
+	printf(" transpos 1 is : \n");
 	show(w);
-	w = transpose(q);
-	printf("m2 Transpose  is : \n");
+	w = tra(extre);
+	printf("transpos  1 is : \n");
 	show(w);
-	printf("Matrix after multiplication : \n");
-	multiply(s, q);
+	printf("answer (m1 X m2) is : \n");
+	multiply(s, extre);
 }
