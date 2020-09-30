@@ -1,108 +1,157 @@
 #include <iostream>
 #include <stdio.h>
 #define sz 11
-struct m
+struct Sparse
 {
-	int nr, nc, nz, r[sz], c[sz], val[sz];
+	int nrow, ncol, nz, row[sz], col[sz], value[sz];
 };
-void read(struct m *s)
+Sparse addition(struct Sparse s1, struct Sparse s2)
 {
-	scanf("%d%d%d", &s->nr, &s->nc, &s->nz);
+	int i = 0, j = 0, k = 0;
+	Sparse s3;
+	s3.nrow = s1.nrow;
+	s3.ncol = s1.ncol;
+
+	for (i = 0; i < s1.nz && j < s2.nz;)
+	{
+		if (s1.row[i] < s2.row[j] || s1.row[i] == s2.row[j] && s1.col[i] < s2.col[j])
+		{
+			s3.row[k] = s1.row[i];
+			s3.col[k] = s1.col[i];
+			s3.value[k] = s1.value[i];
+			i++;
+			k++;
+		}
+		else if (s1.col[i] == s2.col[j] && s1.row[i] == s2.row[j])
+		{
+			if (s1.value[i] + s2.value[j] != 0)
+			{
+
+				s3.value[k] = s1.value[i] + s2.value[j];
+				s3.col[k] = s1.col[i];
+				s3.row[k] = s1.row[i];
+				k++;
+			}
+			i++;
+			j++;
+		}
+		else
+		{
+			s3.row[k] = s2.row[j];
+			s3.col[k] = s2.col[j];
+			s3.value[k] = s2.value[j];
+			j++;
+			k++;
+		}
+	}
+	for (; i < s1.nz; i++, k++)
+	{
+		s3.row[k] = s1.row[i];
+		s3.col[k] = s1.col[i];
+		s3.value[k] = s1.value[i];
+	}
+	for (; j < s2.nz; j++, k++)
+	{
+		s3.row[k] = s2.row[j];
+		s3.col[k] = s2.col[j];
+		s3.value[k] = s2.value[j];
+	}
+	s3.nz = k;
+	return s3;
+}
+void readMatrix(struct Sparse *S)
+{
+	scanf("%d%d%d", &S->nrow, &S->ncol, &S->nz);
 	int i = 0;
 	printf("Enter row column no. order respctively\n");
-	while (i < s->nz)
+	for (; i < S->nz;)
 	{
-		scanf("%d%d%d", &s->r[i], &s->c[i], &s->val[i]);
-		if (s->r[i] > s->nr || s->c[i] > s->nc)
+		scanf("%d%d%d", &S->row[i], &S->col[i], &S->value[i]);
+		if (S->row[i] > S->nrow || S->col[i] > S->ncol)
 		{
 			printf("Enter Coreectly \n");
-			scanf("%d%d%d", &s->r[i], &s->c[i], &s->val[i]);
+			scanf("%d%d%d", &S->row[i], &S->col[i], &S->value[i]);
 		}
 		i++;
 	}
 }
-void show(struct m s)
+void printMatrix(struct Sparse S)
 {
-	int i = 0;
-	while (i < s.nz)
+
+	for (int i = 0; i < S.nz; i++)
 	{
-		printf(" %d %d %d \n", s.r[i], s.c[i], s.val[i]);
-		i++;
+		printf(" %d %d %d \n", S.row[i], S.col[i], S.value[i]);
 	}
 }
-struct m tra(struct m s)
+struct Sparse Transpose(struct Sparse A)
 {
-	struct m extre;
+	struct Sparse extre;
 	int t[sz] = {}, f[sz] = {};
-	int i = 0;
-	while (i < s.nz)
+	int i;
+	for (i = 0; i < A.nz; i++)
 	{
-		f[s.c[i]]++;
-		i++;
+		f[A.col[i]]++;
 	}
-	i = 0;
-	while (i < s.nc)
+
+	for (i = 0; i < A.ncol; i++)
 	{
 		t[i + 1] = t[i] + f[i];
-		i++;
 	}
-	i = 0;
-	while (i < s.nz)
+
+	for (i = 0; i < A.nz; i++)
 	{
-		extre.r[t[s.c[i]]] = s.c[i];
-		extre.c[t[s.c[i]]] = s.r[i];
-		extre.val[t[s.c[i]]] = s.val[i];
-		t[s.c[i]]++;
-		i++;
+		extre.row[t[A.col[i]]] = A.col[i];
+		extre.col[t[A.col[i]]] = A.row[i];
+		extre.value[t[A.col[i]]] = A.value[i];
+		t[A.col[i]]++;
 	}
-	extre.nz = s.nz;
-	extre.nr = s.nc;
-	extre.nc = s.nr;
+
+	extre.nrow = A.ncol;
+	extre.ncol = A.nrow;
+	extre.nz = A.nz;
 	return extre;
 }
 
-void multiply(struct m a, struct m m)
+void multiply(struct Sparse A, struct Sparse B)
 {
-	struct m matrix2 = tra(m);
+	struct Sparse matrix2 = Transpose(B);
 	int res[sz][sz] = {};
-	int i = 0, j;
-	while (i < a.nz)
+	int i, j;
+	for (i = 0; i < A.nz; i++)
 	{
-		j = 0;
-		while (j < matrix2.nz)
+		for (j = 0; j < matrix2.nz; j++)
 		{
-			if (a.c[i] == matrix2.c[j])
-				res[a.r[i]][matrix2.r[j]] += a.val[i] * matrix2.val[j];
-			j++;
+			if (A.col[i] == matrix2.col[j])
+				res[A.row[i]][matrix2.row[j]] += A.value[i] * matrix2.value[j];
 		}
-		i++;
 	}
-	i = 0;
-	while (i < a.nr)
+
+	for (i = 0; i < A.nrow; i++)
 	{
-		j = 0;
-		while (j < m.nc)
+
+		for (j = 0; j < B.ncol; j++)
 		{
 			printf("%d ", res[i][j]);
-			j++;
 		}
 		printf("\n");
-		i++;
 	}
 }
 int main()
 {
-	struct m s, extre, w;
+	struct Sparse s, extre, w;
 	printf(" no. of rows,col and num of 1 m.\n");
-	read(&s);
+	readMatrix(&s);
 	printf(" no. of rows,col and num of 2 m.\n");
-	read(&extre);
-	w = tra(s);
+	readMatrix(&extre);
+	w = Transpose(s);
 	printf(" transpos 1 is : \n");
-	show(w);
-	w = tra(extre);
+	printMatrix(w);
+	w = Transpose(extre);
 	printf("transpos  1 is : \n");
-	show(w);
+	printMatrix(w);
+	Sparse s3 = addition(s, extre);
+	printf("\naddition m1+m2 non zero elements will be in order(row,col,value):\n");
+	printMatrix(s3);
 	printf("answer (m1 X m2) is : \n");
 	multiply(s, extre);
 }
