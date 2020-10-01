@@ -4,8 +4,8 @@ This is a repository for A5 COE Data Structures lab course offered by Delhi Tech
 
 ### This repository is specially related to
 #### Shashi Shekhar 
-#### Satwik batra 
-#### sanket barman 
+#### Satwik Batra 
+#### Sanket Barman 
 #### Ryan Dhiman 
 #### Shivam Jha 
 #### Smarth Mehta 
