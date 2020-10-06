@@ -1,5 +1,7 @@
+#include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
+using namespace std;
+
 struct node
 {
     int val;
@@ -13,7 +15,7 @@ struct head
 void InsertAtEnd(struct head *hd, int x)
 {
     struct node *temp;
-    temp = (struct node *)malloc(sizeof(struct node));
+    temp = (struct node *)malloc(100 * sizeof(struct node));
     temp->val = x;
     temp->next = NULL;
     if (hd->start == NULL)
@@ -53,23 +55,18 @@ void InsertAfter(struct head *hd, int x, int a)
     temp->next = h->next;
     h->next = temp;
 }
-int search(struct head *h, int x)
+int search(struct head h, int x)
 {
-    while (h->start != NULL)
+    while (h.start != NULL)
     {
-        if (h->start->val == x)
+        if (h.start->val == x)
             return 1;
-        h->start = h->start->next;
+        h.start = h.start->next;
     }
     return 0;
 }
-void delete (struct head *hd, int x)
+void deletell(struct head *hd, int x)
 {
-    if (hd->start == NULL)
-    {
-        printf("underflow empty \n");
-        return;
-    }
     struct node *t = hd->start;
     if (t->val == x)
         hd->start = t->next;
@@ -77,18 +74,12 @@ void delete (struct head *hd, int x)
     {
         struct node *p = t;
         t = t->next;
-        while (t && t->val != x)
+        while (t->val != x)
         {
             t = t->next;
             p = p->next;
         }
-        if (t == NULL)
-        {
-            printf("not deleted not found\n");
-            return;
-        }
         p->next = t->next;
-        printf("deleted \n");
         free(t);
     }
 }
@@ -107,9 +98,9 @@ int main()
     struct head hd;
     hd.start = hd.end = NULL;
     int c, x, f;
-    printf("1. Insert at end\n2. Insert at front\n3. Insert after\n4.Search\n5. Delete\n6. Count\n7. Exit");
     while (1)
     {
+        printf("1. Insert at end\n2. Insert at front\n3. Insert after\n4.Search\n5. Delete\n6. Count\n7. Exit\n");
         scanf("%d", &c);
         if (c == 1)
         {
@@ -137,7 +128,7 @@ int main()
         if (c == 5)
         {
             scanf("%d", &x);
-            delete (&hd, x);
+            deletell(&hd, x);
         }
         if (c == 6)
         {

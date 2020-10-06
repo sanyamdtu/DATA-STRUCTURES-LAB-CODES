@@ -2,24 +2,24 @@
 #include <stdio.h>
 using namespace std;
 
-struct linkedlist
+struct list
 {
     int num;
-    struct linkedlist *next;
+    struct list *next;
 };
-struct linkedlist *first(struct linkedlist *s, int x)
+struct list *first(struct list *s, int x)
 {
-    struct linkedlist *q;
-    q = (struct linkedlist *)malloc(100 * sizeof(struct linkedlist));
+    struct list *q;
+    q = (struct list *)malloc(100 * sizeof(struct list));
     q->num = x;
     q->next = s;
     s = q;
     return s;
 }
-struct linkedlist *back(struct linkedlist *s, int x)
+struct list *back(struct list *s, int x)
 {
-    struct linkedlist *p, *q;
-    q = (struct linkedlist *)malloc(100 * sizeof(struct linkedlist));
+    struct list *p, *q;
+    q = (struct list *)malloc(100 * sizeof(struct list));
     q->num = x;
     q->next = NULL;
     p = s;
@@ -35,10 +35,10 @@ struct linkedlist *back(struct linkedlist *s, int x)
     p->next = q;
     return s;
 }
-struct linkedlist *after(struct linkedlist *s, int x, int y)
+struct list *after(struct list *s, int x, int y)
 {
-    struct linkedlist *p, *q;
-    q = (struct linkedlist *)malloc(100 * sizeof(struct linkedlist));
+    struct list *p, *q;
+    q = (struct list *)malloc(100 * sizeof(struct list));
     q->num = x;
     p = s;
     if (s == NULL)
@@ -64,14 +64,14 @@ struct linkedlist *after(struct linkedlist *s, int x, int y)
     p->next = q;
     return s;
 }
-struct linkedlist *delete_(struct linkedlist *s, int x)
+struct list *delete_(struct list *s, int x)
 {
     if (s == NULL)
     {
         printf("undrflow\n");
         return s;
     }
-    struct linkedlist *p, *q;
+    struct list *p, *q;
     q = s;
     p = NULL;
     while (q != NULL && q->num != x)
@@ -98,9 +98,9 @@ struct linkedlist *delete_(struct linkedlist *s, int x)
 
     return s;
 }
-void search(struct linkedlist *s, int x)
+void search(struct list *s, int x)
 {
-    struct linkedlist *p = s;
+    struct list *p = s;
     int flag = 0;
     if (s == NULL)
     {
@@ -124,9 +124,9 @@ void search(struct linkedlist *s, int x)
         printf("\nfound. \n");
     }
 }
-void display(struct linkedlist *s)
+void display(struct list *s)
 {
-    struct linkedlist *p = s;
+    struct list *p = s;
     if (p == NULL)
     {
         printf("\nno node\n");
@@ -139,9 +139,9 @@ void display(struct linkedlist *s)
     }
     printf("%d\n", p->num);
 }
-int count(struct linkedlist *s)
+int count(struct list *s)
 {
-    struct linkedlist *p = s;
+    struct list *p = s;
     int c = 0;
     while (p != NULL)
     {
@@ -153,7 +153,7 @@ int count(struct linkedlist *s)
 int main()
 {
     int x, y;
-    struct linkedlist *p = NULL;
+    struct list *p = NULL;
     while (1)
     {
         int q;
@@ -210,6 +210,10 @@ int main()
         if (q == 8)
         {
             break;
+        }
+        else
+        {
+            printf("wrong choice\n");
         }
     }
     return 0;
