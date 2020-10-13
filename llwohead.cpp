@@ -2,24 +2,24 @@
 #include <stdio.h>
 using namespace std;
 
-struct list
+struct list_node
 {
     int num;
-    struct list *next;
+    struct list_node *next;
 };
-struct list *first(struct list *s, int x)
+struct list_node *first(struct list_node *s, int x)
 {
-    struct list *q;
-    q = (struct list *)malloc(100 * sizeof(struct list));
+    struct list_node *q;
+    q = (struct list_node *)malloc(100 * sizeof(struct list_node));
     q->num = x;
     q->next = s;
     s = q;
     return s;
 }
-struct list *back(struct list *s, int x)
+struct list_node *back(struct list_node *s, int x)
 {
-    struct list *p, *q;
-    q = (struct list *)malloc(100 * sizeof(struct list));
+    struct list_node *p, *q;
+    q = (struct list_node *)malloc(100 * sizeof(struct list_node));
     q->num = x;
     q->next = NULL;
     p = s;
@@ -35,10 +35,10 @@ struct list *back(struct list *s, int x)
     p->next = q;
     return s;
 }
-struct list *after(struct list *s, int x, int y)
+struct list_node *after(struct list_node *s, int x, int y)
 {
-    struct list *p, *q;
-    q = (struct list *)malloc(100 * sizeof(struct list));
+    struct list_node *p, *q;
+    q = (struct list_node *)malloc(100 * sizeof(struct list_node));
     q->num = x;
     p = s;
     if (s == NULL)
@@ -64,14 +64,14 @@ struct list *after(struct list *s, int x, int y)
     p->next = q;
     return s;
 }
-struct list *delete_(struct list *s, int x)
+struct list_node *delete_(struct list_node *s, int x)
 {
     if (s == NULL)
     {
         printf("undrflow\n");
         return s;
     }
-    struct list *p, *q;
+    struct list_node *p, *q;
     q = s;
     p = NULL;
     while (q != NULL && q->num != x)
@@ -98,9 +98,9 @@ struct list *delete_(struct list *s, int x)
 
     return s;
 }
-void search(struct list *s, int x)
+void search(struct list_node *s, int x)
 {
-    struct list *p = s;
+    struct list_node *p = s;
     int flag = 0;
     if (s == NULL)
     {
@@ -124,9 +124,9 @@ void search(struct list *s, int x)
         printf("\nfound. \n");
     }
 }
-void display(struct list *s)
+void display(struct list_node *s)
 {
-    struct list *p = s;
+    struct list_node *p = s;
     if (p == NULL)
     {
         printf("\nno node\n");
@@ -139,9 +139,9 @@ void display(struct list *s)
     }
     printf("%d\n", p->num);
 }
-int count(struct list *s)
+int count(struct list_node *s)
 {
-    struct list *p = s;
+    struct list_node *p = s;
     int c = 0;
     while (p != NULL)
     {
@@ -153,7 +153,7 @@ int count(struct list *s)
 int main()
 {
     int x, y;
-    struct list *p = NULL;
+    struct list_node *p = NULL;
     while (1)
     {
         int q;

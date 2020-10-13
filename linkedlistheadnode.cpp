@@ -1,19 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-struct linked
+struct nod
 {
     int val;
-    struct linked *next;
+    struct nod *next;
 };
 struct h
 {
-    struct linked *p;
-    struct linked *end;
+    struct nod *p; //start
+    struct nod *end;
 };
 void InsertAtEnd(struct h *hd, int x)
 {
-    struct linked *temp;
-    temp = (struct linked *)malloc(sizeof(struct linked));
+    struct nod *temp;
+    temp = (struct nod *)malloc(sizeof(struct nod));
     temp->val = x;
     temp->next = NULL;
     if (hd->p == NULL)
@@ -24,10 +24,10 @@ void InsertAtEnd(struct h *hd, int x)
     else
         hd->end->next = temp;
 }
-void particular_insert_after(struct h *hd, int x)
+void insert_start(struct h *hd, int x)
 {
-    struct linked *temp;
-    temp = (struct linked *)malloc(sizeof(struct linked));
+    struct nod *temp;
+    temp = (struct nod *)malloc(sizeof(struct nod));
     temp->val = x;
     temp->next = NULL;
     if (hd->p == NULL)
@@ -43,11 +43,11 @@ void particular_insert_after(struct h *hd, int x)
 }
 void InsertAfter(struct h *hd, int x, int a)
 {
-    struct linked *temp;
-    temp = (struct linked *)malloc(sizeof(struct linked));
+    struct nod *temp;
+    temp = (struct nod *)malloc(sizeof(struct nod));
     temp->val = x;
     temp->next = NULL;
-    struct linked *h = hd->p;
+    struct nod *h = hd->p;
     while (h->val != a)
         h = h->next;
     temp->next = h->next;
@@ -63,19 +63,19 @@ int search(struct h *h, int x)
     }
     return 0;
 }
-void dellinked_list(struct h *hd, int x)
+void delnod_list(struct h *hd, int x)
 {
     if (hd->p == NULL)
     {
         printf("underflow empty \n");
         return;
     }
-    struct linked *t = hd->p;
+    struct nod *t = hd->p;
     if (t->val == x)
         hd->p = t->next;
     else
     {
-        struct linked *p = t;
+        struct nod *p = t;
         t = t->next;
         while (t && t->val != x)
         {
@@ -102,12 +102,12 @@ int total(struct h h)
     }
     return ans;
 }
-void display(struct linked *s)
+void display(struct nod *s)
 {
-    struct linked *p = s;
+    struct nod *p = s;
     if (p == NULL)
     {
-        printf("Linked list is empty.");
+        printf("nod list is empty.");
         return;
     }
     while (p->next != NULL)
@@ -137,7 +137,7 @@ int main()
         {
             printf("\nEnter the number to be inserted at front.");
             scanf("%d", &x);
-            particular_insert_after(&hd, x);
+            insert_start(&hd, x);
         }
         if (c == 3)
         {
@@ -160,7 +160,7 @@ int main()
         {
             printf("\nEnter the number to be deleted.");
             scanf("%d", &x);
-            dellinked_list(&hd, x);
+            delnod_list(&hd, x);
         }
         if (c == 6)
         {
@@ -169,7 +169,7 @@ int main()
         }
         if (c == 7)
         {
-            struct linked *p = hd.p;
+            struct nod *p = hd.p;
             display(p);
         }
         if (c == 8)
