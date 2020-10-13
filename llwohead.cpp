@@ -1,220 +1,178 @@
-#include <iostream>
 #include <stdio.h>
-using namespace std;
-
-struct list_node
+#include <stdlib.h>
+struct nod
 {
-    int num;
-    struct list_node *next;
+    int val;
+    struct nod *next;
 };
-struct list_node *first(struct list_node *s, int x)
+struct h
 {
-    struct list_node *q;
-    q = (struct list_node *)malloc(100 * sizeof(struct list_node));
-    q->num = x;
-    q->next = s;
-    s = q;
-    return s;
+    struct nod *p; //start
+    struct nod *end;
+};
+void InsertAtEnd(struct h *hd, int x)
+{
+    struct nod *temp;
+    temp = (struct nod *)malloc(sizeof(struct nod));
+    temp->val = x;
+    temp->next = NULL;
+    if (hd->p == NULL)
+    {
+        hd->p = temp;
+        hd->end = temp;
+    }
+    else
+        hd->end->next = temp;
 }
-struct list_node *back(struct list_node *s, int x)
+void insert_start(struct h *hd, int x)
 {
-    struct list_node *p, *q;
-    q = (struct list_node *)malloc(100 * sizeof(struct list_node));
-    q->num = x;
-    q->next = NULL;
-    p = s;
-    if (s == NULL)
+    struct nod *temp;
+    temp = (struct nod *)malloc(sizeof(struct nod));
+    temp->val = x;
+    temp->next = NULL;
+    if (hd->p == NULL)
     {
-        s = q;
-        return s;
-    }
-    while (p->next != NULL)
-    {
-        p = p->next;
-    }
-    p->next = q;
-    return s;
-}
-struct list_node *after(struct list_node *s, int x, int y)
-{
-    struct list_node *p, *q;
-    q = (struct list_node *)malloc(100 * sizeof(struct list_node));
-    q->num = x;
-    p = s;
-    if (s == NULL)
-    {
-        q->next = NULL;
-        s = q;
-        return s;
-    }
-    while (p->num != y)
-    {
-        if (p->next == NULL)
-        {
-            break;
-        }
-        p = p->next;
-    }
-    if (p->next == NULL && p->num != y)
-    {
-        printf("\nnot found\n");
-        return s;
-    }
-    q->next = p->next;
-    p->next = q;
-    return s;
-}
-struct list_node *delete_(struct list_node *s, int x)
-{
-    if (s == NULL)
-    {
-        printf("undrflow\n");
-        return s;
-    }
-    struct list_node *p, *q;
-    q = s;
-    p = NULL;
-    while (q != NULL && q->num != x)
-    {
-        p = q;
-        q = q->next;
-    }
-    if (q != NULL)
-    {
-        if (q == s)
-        {
-            s = s->next;
-        }
-        else
-        {
-            p->next = q->next;
-            free(q);
-        }
+        hd->p = temp;
+        hd->end = temp;
     }
     else
     {
-        printf("\nElemenet not deleted\n");
+        temp->next = hd->p;
+        hd->p = temp;
     }
-
-    return s;
 }
-void search(struct list_node *s, int x)
+void InsertAfter(struct h *hd, int x, int a)
 {
-    struct list_node *p = s;
-    int flag = 0;
-    if (s == NULL)
+    struct nod *temp;
+    temp = (struct nod *)malloc(sizeof(struct nod));
+    temp->val = x;
+    temp->next = NULL;
+    struct nod *h = hd->p;
+    while (h->val != a)
+        h = h->next;
+    temp->next = h->next;
+    h->next = temp;
+}
+int search(struct h *h, int x)
+{
+    while (h->p != NULL)
     {
-        printf("underflow no node \n");
+        if (h->p->val == x)
+            return 1;
+        h->p = h->p->next;
+    }
+    return 0;
+}
+void delnod_list(struct h *hd, int x)
+{
+    if (hd->p == NULL)
+    {
+        printf("underflow empty \n");
         return;
     }
-    while (p != NULL)
-    {
-        if (p->num == x)
-        {
-            flag = 1;
-        }
-        p = p->next;
-    }
-    if (flag == 0)
-    {
-        printf("\nnot found.\n");
-    }
+    struct nod *t = hd->p;
+    if (t->val == x)
+        hd->p = t->next;
     else
     {
-        printf("\nfound. \n");
+        struct nod *p = t;
+        t = t->next;
+        while (t && t->val != x)
+        {
+            t = t->next;
+            p = p->next;
+        }
+        if (t == NULL)
+        {
+            printf("not deleted not found\n");
+            return;
+        }
+        p->next = t->next;
+        printf("deleted \n");
+        free(t);
     }
 }
-void display(struct list_node *s)
+int total(struct h h)
 {
-    struct list_node *p = s;
+    int ans = 0;
+    while (h.p != NULL)
+    {
+        h.p = h.p->next;
+        ans++;
+    }
+    return ans;
+}
+void display(struct nod *s)
+{
+    struct nod *p = s;
     if (p == NULL)
     {
-        printf("\nno node\n");
+        printf("nod list is empty.");
         return;
     }
     while (p->next != NULL)
     {
-        printf("%d-> ", p->num);
+        printf("%d-> ", p->val);
         p = p->next;
     }
-    printf("%d\n", p->num);
-}
-int count(struct list_node *s)
-{
-    struct list_node *p = s;
-    int c = 0;
-    while (p != NULL)
-    {
-        c++;
-        p = p->next;
-    }
-    return c;
+    printf("%d", p->val);
 }
 int main()
 {
-    int x, y;
-    struct list_node *p = NULL;
+    struct h hd;
+    hd.p = hd.end = NULL;
+    int c, x, f;
     while (1)
     {
-        int q;
-        printf("1.Insert start\n");
-        printf("2.Insert end\n");
-        printf("3.Insert after a certain number\n");
-        printf("4.Delete\n");
-        printf("5.counts\n");
-        printf("6.Search\n");
-        printf("7.Print\n");
-        printf("8.Exit\n");
-        scanf("%d", &q);
-        if (q == 1)
+        printf("\n1. Insert at end\n2. Insert at front\n3. Insert after\n4. Search\n5. Delete\n6. total\n7. Display\n8. Exit");
+        printf("\nEnter the choice : ");
+        scanf("%d", &c);
+        if (c == 1)
         {
-            printf("Enter the number: ");
+            printf("\nEnter the number to be inserted at end.");
             scanf("%d", &x);
-            p = first(p, x);
+            InsertAtEnd(&hd, x);
         }
-        if (q == 2)
+        if (c == 2)
         {
-            printf("Enter the number: ");
+            printf("\nEnter the number to be inserted at front.");
             scanf("%d", &x);
-            p = back(p, x);
+            insert_start(&hd, x);
         }
-        if (q == 3)
+        if (c == 3)
         {
-            printf("Enter the number after which insertion will take pace : ");
-            scanf("%d", &y);
-            printf("Enter the number inserted : ");
+            printf("\nEnter the number to after which you want to insert.");
+            scanf("%d", &f);
+            printf("\nEnter the number to be inserted.");
             scanf("%d", &x);
-            p = after(p, x, y);
+            InsertAfter(&hd, x, f);
         }
-        if (q == 4)
+        if (c == 4)
         {
-            printf("Enter the number: ");
+            printf("\nEnter the number to be searched.");
             scanf("%d", &x);
-            p = delete_(p, x);
+            if (search(&hd, x) > 0)
+                printf("Found\n");
+            else
+                printf("Not Found\n");
         }
-        if (q == 5)
+        if (c == 5)
         {
-            printf("Enter the number  : ");
+            printf("\nEnter the number to be deleted.");
             scanf("%d", &x);
-            search(p, x);
+            delnod_list(&hd, x);
         }
-        if (q == 6)
+        if (c == 6)
         {
-            y = count(p);
-            printf("total : %d\n", y);
+            x = total(hd);
+            printf("\nThe number of elements present are : %d", x);
         }
-        if (q == 7)
+        if (c == 7)
         {
+            struct nod *p = hd.p;
             display(p);
         }
-        if (q == 8)
-        {
-            break;
-        }
-        else
-        {
-            printf("wrong choice\n");
-        }
+        if (c == 8)
+            return 0;
     }
-    return 0;
 }

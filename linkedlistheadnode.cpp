@@ -1,178 +1,201 @@
+#include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
-struct nod
+using namespace std;
+
+struct node
 {
-    int val;
-    struct nod *next;
+    int value;
+    struct node *next;
 };
-struct h
+struct node *first(struct node *s, int x)
 {
-    struct nod *p; //start
-    struct nod *end;
-};
-void InsertAtEnd(struct h *hd, int x)
+    struct node *q;
+    q = (struct node *)malloc(100 * sizeof(struct node));
+    q->value = x;
+    q->next = s;
+    s = q;
+    return s;
+}
+struct node *insert_at_end(struct node *s, int x)
 {
-    struct nod *temp;
-    temp = (struct nod *)malloc(sizeof(struct nod));
-    temp->val = x;
-    temp->next = NULL;
-    if (hd->p == NULL)
+    struct node *p, *q;
+    q = (struct node *)malloc(100 * sizeof(struct node));
+    q->value = x;
+    q->next = NULL;
+    p = s;
+    if (s == NULL)
     {
-        hd->p = temp;
-        hd->end = temp;
+        s = q;
+        return s;
+    }
+    while (p->next != NULL)
+    {
+        p = p->next;
+    }
+    p->next = q;
+    return s;
+}
+struct node *insert_after(struct node *s, int x, int y)
+{
+    struct node *p, *q;
+    q = (struct node *)malloc(100 * sizeof(struct node));
+    q->value = x;
+    p = s;
+    if (s == NULL)
+    {
+        q->next = NULL;
+        s = q;
+        return s;
+    }
+    while (p->value != y)
+    {
+        /*if(p->next==NULL){
+			break;
+		} */
+        p = p->next;
+    }
+    if (p->next == NULL && p->value != y)
+    {
+        printf("\n %d doesn't exist.", y);
+        return s;
+    }
+    q->next = p->next;
+    p->next = q;
+    return s;
+}
+struct node *delete_(struct node *s, int x)
+{
+    if (s == NULL)
+    {
+        printf("Linked list is empty.");
+        return s;
+    }
+    struct node *p, *q;
+    q = s;
+    p = NULL;
+    while (q != NULL && q->value != x)
+    {
+        p = q;
+        q = q->next;
+    }
+    if (q != NULL)
+    {
+        if (q == s)
+        {
+            s = s->next;
+        }
+        else
+        {
+            p->next = q->next;
+            free(q);
+        }
     }
     else
-        hd->end->next = temp;
-}
-void insert_start(struct h *hd, int x)
-{
-    struct nod *temp;
-    temp = (struct nod *)malloc(sizeof(struct nod));
-    temp->val = x;
-    temp->next = NULL;
-    if (hd->p == NULL)
     {
-        hd->p = temp;
-        hd->end = temp;
+        printf("Element not found.");
     }
-    else
-    {
-        temp->next = hd->p;
-        hd->p = temp;
-    }
+    return s;
 }
-void InsertAfter(struct h *hd, int x, int a)
+void search(struct node *s, int x)
 {
-    struct nod *temp;
-    temp = (struct nod *)malloc(sizeof(struct nod));
-    temp->val = x;
-    temp->next = NULL;
-    struct nod *h = hd->p;
-    while (h->val != a)
-        h = h->next;
-    temp->next = h->next;
-    h->next = temp;
-}
-int search(struct h *h, int x)
-{
-    while (h->p != NULL)
+    struct node *p = s;
+    int flag = 0;
+    if (s == NULL)
     {
-        if (h->p->val == x)
-            return 1;
-        h->p = h->p->next;
-    }
-    return 0;
-}
-void delnod_list(struct h *hd, int x)
-{
-    if (hd->p == NULL)
-    {
-        printf("underflow empty \n");
+        printf("Linked list is empty.");
         return;
     }
-    struct nod *t = hd->p;
-    if (t->val == x)
-        hd->p = t->next;
+    while (p != NULL)
+    {
+        if (p->value == x)
+        {
+            flag = 1;
+        }
+        p = p->next;
+    }
+    if (flag == 0)
+    {
+        printf("Element not found.");
+    }
     else
     {
-        struct nod *p = t;
-        t = t->next;
-        while (t && t->val != x)
-        {
-            t = t->next;
-            p = p->next;
-        }
-        if (t == NULL)
-        {
-            printf("not deleted not found\n");
-            return;
-        }
-        p->next = t->next;
-        printf("deleted \n");
-        free(t);
+        printf("Element found. ");
     }
 }
-int total(struct h h)
+void display(struct node *s)
 {
-    int ans = 0;
-    while (h.p != NULL)
-    {
-        h.p = h.p->next;
-        ans++;
-    }
-    return ans;
-}
-void display(struct nod *s)
-{
-    struct nod *p = s;
+    struct node *p = s;
     if (p == NULL)
     {
-        printf("nod list is empty.");
+        printf("Linked list is empty.");
         return;
     }
     while (p->next != NULL)
     {
-        printf("%d-> ", p->val);
+        printf("%d-> ", p->value);
         p = p->next;
     }
-    printf("%d", p->val);
+    printf("%d", p->value);
+}
+int count(struct node *s)
+{
+    struct node *p = s;
+    int c = 0;
+    while (p != NULL)
+    {
+        c++;
+        p = p->next;
+    }
+    return c;
 }
 int main()
 {
-    struct h hd;
-    hd.p = hd.end = NULL;
-    int c, x, f;
+    int x, ch, y;
+    struct node *s = NULL;
     while (1)
     {
-        printf("\n1. Insert at end\n2. Insert at front\n3. Insert after\n4. Search\n5. Delete\n6. total\n7. Display\n8. Exit");
-        printf("\nEnter the choice : ");
-        scanf("%d", &c);
-        if (c == 1)
+        printf("\n\n1. Insert at beginning \n2. Insert at end \n3. Insert after \n4. Delete \n5. Search \n6. Count \n7. Display \n8. Exit\nEnter your choice : ");
+        scanf("%d", &ch);
+        switch (ch)
         {
-            printf("\nEnter the number to be inserted at end.");
+        case 1:
+            printf("Enter the number to be inserted : ");
             scanf("%d", &x);
-            InsertAtEnd(&hd, x);
-        }
-        if (c == 2)
-        {
-            printf("\nEnter the number to be inserted at front.");
+            s = first(s, x);
+            break;
+        case 2:
+            printf("Enter the number to be inserted : ");
             scanf("%d", &x);
-            insert_start(&hd, x);
-        }
-        if (c == 3)
-        {
-            printf("\nEnter the number to after which you want to insert.");
-            scanf("%d", &f);
-            printf("\nEnter the number to be inserted.");
+            s = insert_at_end(s, x);
+            break;
+        case 3:
+            printf("Enter the number after which you want to insert : ");
+            scanf("%d", &y);
+            printf("Enter the number you want to insert : ");
             scanf("%d", &x);
-            InsertAfter(&hd, x, f);
-        }
-        if (c == 4)
-        {
-            printf("\nEnter the number to be searched.");
+            s = insert_after(s, x, y);
+            break;
+        case 4:
+            printf("Enter the number to be deleted : ");
             scanf("%d", &x);
-            if (search(&hd, x) > 0)
-                printf("Found\n");
-            else
-                printf("Not Found\n");
-        }
-        if (c == 5)
-        {
-            printf("\nEnter the number to be deleted.");
+            s = delete_(s, x);
+            break;
+        case 5:
+            printf("Enter the number to be searched : ");
             scanf("%d", &x);
-            delnod_list(&hd, x);
+            search(s, x);
+            break;
+        case 6:
+            y = count(s);
+            printf("The number of elements in linked list are : %d", y);
+            break;
+        case 7:
+            display(s);
+            break;
+        case 8:
+            exit(0);
+            break;
         }
-        if (c == 6)
-        {
-            x = total(hd);
-            printf("\nThe number of elements present are : %d", x);
-        }
-        if (c == 7)
-        {
-            struct nod *p = hd.p;
-            display(p);
-        }
-        if (c == 8)
-            return 0;
     }
+    return 0;
 }
